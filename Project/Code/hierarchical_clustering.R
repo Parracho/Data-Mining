@@ -1,4 +1,4 @@
-setwd("C:/Users/bfpar/Documents/DataMining/Project/Code")      # Change working directory
+setwd("C:/Users/telmo/OneDrive/Ambiente de Trabalho/MEDM Project 1/")      # Change working directory
 library(factoextra); library(foreign); library(fields)
 higgs <- read.arff("dataset.arff")
 data_frame <- data.frame(higgs)
@@ -13,105 +13,104 @@ scores <- pca_result$x
 eigenvalues <- pca_result$sdev^2
 retain_components <- which(eigenvalues > 1)
 PCA_13_first <- pca_result$x[, retain_components]
+
+predictors_scale <- scale(predictors, center = TRUE, scale = TRUE) #scaling the original variables
+
 #------------------------------------------------------------------------------------------------------------
-wardsmethod<-hclust(dist(PCA_13_first),method="ward.D")
-print(wardsmethod)
-plot(wardsmethod, main = "Hierarchical Clustering Dendrogram", xlab = "Data Points")
-image.plot(1:ncol(PCA_13_first),1:nrow(PCA_13_first),t(PCA_13_first),
-           col=tim.colors(200),xlab="Variables",ylab="Events",cex.lab=1.4)
+library(dendextend)
+#method = Ward2, distance = euclidian
+hierarchical <- hclust(dist(PCA_13_first), method = "ward.D2")
+# Convert the dendrogram to a dendrogram object
+dend <- as.dendrogram(hierarchical)
+# Remove the labels
+labels(dend) <- NULL
+plot(dend, center = FALSE, main = "Hierarchical Clustering Dendrogram with Ward2 method", 
+     xlab = "Data Points (distance = Euclidian)")
 
+#method = Ward2, distance = manhattan
+hierarchical <- hclust(dist(PCA_13_first,method="manhattan"), method = "ward.D2")
+dend <- as.dendrogram(hierarchical)
+labels(dend) <- NULL
+plot(dend, center = FALSE, main = "Hierarchical Clustering Dendrogram with Ward2 method", 
+     xlab = "Data Points (distance = Manhattan)")
 
-# Calculate the dissimilarity matrix using predefined distance (euclidian)
-# clusters the points
-dist_matrix <- dist(PCA_13_first)
-# Perform hierarchical clustering (using complete linkage in this example)
-hierarchical_cluster <- hclust(dist_matrix, method = "complete")
-# Plot the dendrogram
-plot(hierarchical_cluster, main = "Hierarchical Clustering Dendrogram", xlab = "Data Points")
-ord = hierarchical_cluster$order
-image.plot(1:ncol(PCA_13_first),1:nrow(PCA_13_first),t(PCA_13_first),
-           col=tim.colors(200),xlab="Variables",ylab="Events",cex.lab=1.4)
+#method = Ward2, distance = maximum
+hierarchical <- hclust(dist(PCA_13_first,method="maximum"), method = "ward.D2")
+dend <- as.dendrogram(hierarchical)
+labels(dend) <- NULL
+plot(dend, center = FALSE, main = "Hierarchical Clustering Dendrogram with Ward2 method", 
+     xlab = "Data Points (distance = Chebyshev)")
+#-----------------------------------------
+#method = complete, distance = euclidian
+hierarchical <- hclust(dist(PCA_13_first), method = "complete")
+dend <- as.dendrogram(hierarchical)
+labels(dend) <- NULL
+plot(dend, center = FALSE, main = "Hierarchical Clustering Dendrogram with complete method", 
+     xlab = "Data Points (distance = Euclidian)")
 
-#repeat for average linkage
-dist_matrix <- dist(PCA_13_first)
-hierarchical_cluster <- hclust(dist_matrix, method = "complete")
-# Plot the dendrogram
-plot(hierarchical_cluster, main = "Hierarchical Clustering Dendrogram", xlab = "Data Points")
-ord = hierarchical_cluster$order
-image.plot(1:ncol(PCA_13_first),1:nrow(PCA_13_first),t(PCA_13_first),
-           col=tim.colors(200),xlab="Variables",ylab="Events",cex.lab=1.4)
+#method = complete, distance = manhattan
+hierarchical <- hclust(dist(PCA_13_first,method="manhattan"), method = "complete")
+dend <- as.dendrogram(hierarchical)
+labels(dend) <- NULL
+plot(dend, center = FALSE, main = "Hierarchical Clustering Dendrogram with complete method", 
+     xlab = "Data Points (distance = Manhattan)")
 
-#clusters the principal components
-dist_matrix1 = dist(t(PCA_13_first))
-hierarchical_cluster1 = hclust(dist_matrix1,method="average")
-ord1 = hierarchical_cluster1$order
-plot(hierarchical_cluster1,main = "Hierarchical Clustering Dendrogram", xlab = "Data Points")
-heatmap(PCA_13_first)
+#method = complete, distance = maximum
+hierarchical <- hclust(dist(PCA_13_first,method="maximum"), method = "complete")
+dend <- as.dendrogram(hierarchical)
+labels(dend) <- NULL
+plot(dend, center = FALSE, main = "Hierarchical Clustering Dendrogram with complete method", 
+     xlab = "Data Points (distance = Chebyshev)")
+#-----------------------------------------
+#method = average, distance = euclidian
+hierarchical <- hclust(dist(PCA_13_first), method = "average")
+dend <- as.dendrogram(hierarchical)
+labels(dend) <- NULL
+plot(dend, center = FALSE, main = "Hierarchical Clustering Dendrogram with average method", 
+     xlab = "Data Points (distance = Euclidian)")
 
+#method = average, distance = manhattan
+hierarchical <- hclust(dist(PCA_13_first,method="manhattan"), method = "average")
+dend <- as.dendrogram(hierarchical)
+labels(dend) <- NULL
+plot(dend, center = FALSE, main = "Hierarchical Clustering Dendrogram with average method", 
+     xlab = "Data Points (distance = Manhattan)")
 
+#method = average, distance = maximum
+hierarchical <- hclust(dist(PCA_13_first,method="maximum"), method = "average")
+dend <- as.dendrogram(hierarchical)
+labels(dend) <- NULL
+plot(dend, center = FALSE, main = "Hierarchical Clustering Dendrogram with average method", 
+     xlab = "Data Points (distance = Chebyshev)")
 
-# Calculate the dissimilarity matrix using predefined distance
-dist_matrix <- dist(PCA_13_first,method="euclidian")
-# Perform hierarchical clustering (using complete linkage in this example)
-hierarchical_cluster <- hclust(dist_matrix, method = "average")
-# Plot the dendrogram
-plot(hierarchical_cluster, main = "Hierarchical Clustering Dendrogram", xlab = "Data Points")
-ord = hierarchical_cluster$order
-image.plot(1:ncol(PCA_13_first),1:nrow(PCA_13_first),t(PCA_13_first),
-           col=tim.colors(200),xlab="Variables",ylab="Events",cex.lab=1.4)
-
-dist_matrix1 = dist(t(predictors),method="euclidian")
-hierarchical_cluster1 = hclust(dist_matrix1,method="average")
-ord1 = hierarchical_cluster1$order
-plot(hierarchical_cluster1,main = "Hierarchical Clustering Dendrogram", xlab = "Data Points")
-predictors_numeric <- as.matrix(predictors)
-heatmap(x=PCA_13_first,hclustfun =hierarchical_cluster,main="Heatmap for 13 first PC",verbose=TRUE)
-
-
+#------------------------------------------------------------------------------------------------------------
 library(pheatmap)
-pheatmap(PCA_13_first, main = "Heatmap of first 13 principal components",show_rownames=FALSE)
+#heatmaps for 13 PCA with different methods and distance euclidian
+pheatmap(PCA_13_first, main = "Heatmap of first 13 PC, method=complete, distance=euclidian",
+         show_rownames=FALSE)
+pheatmap(PCA_13_first, main = "Heatmap of first 13 PC, method=average, distance=euclidian",
+         show_rownames=FALSE,clustering_method = "average")
+pheatmap(PCA_13_first, main = "Heatmap of first 13 PC, method=ward.D2, distance=euclidian",
+         show_rownames=FALSE,clustering_method = "ward.D")
+
+#same but with distance manhattan
+pheatmap(PCA_13_first, main = "Heatmap of first 13 PC, method=complete, distance=manhattan",
+         show_rownames=FALSE,clustering_distance_rows="manhattan", clustering_distance_cols="manhattan")
+pheatmap(PCA_13_first, main = "Heatmap of first 13 PC, method=average, distance=manhattan", show_rownames=FALSE,
+         clustering_method = "average",clustering_distance_rows="manhattan", clustering_distance_cols="manhattan")
+pheatmap(PCA_13_first, main = "Heatmap of first 13 PC, method=ward.D2, distance=manhattan",show_rownames=FALSE,
+         clustering_method = "ward.D",clustering_distance_rows="correlation", clustering_distance_cols="manhattan")
+
+#same but with distance maximum
+pheatmap(PCA_13_first, main = "Heatmap of first 13 PC, method=complete, distance=maximum",
+         show_rownames=FALSE,clustering_distance_rows="maximum", clustering_distance_cols="maximum")
+pheatmap(PCA_13_first, main = "Heatmap of first 13 PC, method=average, distance=maximum", show_rownames=FALSE,
+         clustering_method = "average",clustering_distance_rows="maximum", clustering_distance_cols="maximum")
+pheatmap(PCA_13_first, main = "Heatmap of first 13 PC, method=ward.D2, distance=maximum",show_rownames=FALSE,
+         clustering_method = "ward.D",clustering_distance_rows="maximum", clustering_distance_cols="maximum")
 
 
-
-library(colorspace); library(dendextend)
-distance <- dist(PCA_13_first)
-hc <- hclust(distance, method = "average")
-higgs_target <- rev(levels(target))
-dend <- as.dendrogram(hc)
-dend <- rotate(dend, 1:10000)
-dend <- color_branches(dend, k = 2)
-# Manually match the labels to the real classification
-ordered_target <- as.numeric(target)[order.dendrogram(dend)]
-target_colors <- rainbow_hcl(2)[ordered_target]
-# Modify the labels to include target values and cluster memberships
-cluster_labels <- paste(as.character(target), "(", labels(dend), ")", sep = " ")
-labels(dend) <- cluster_labels
-dend <- hang.dendrogram(dend, hang_height = 0.1)
-dend <- set(dend, "labels_cex", 0.5)
-par(mar = c(4, 4, 4, 6))
-plot(dend, main = "Clustered Higgs data set", horiz = FALSE, nodePar = list(cex = 0.002))
-legend("topright", legend = higgs_target, fill = target_colors)
-
-
-
-
-
-distance <- dist(PCA_13_first)
-hc <- hclust(distance, method = "complete")
-higgs_target <- rev(levels(target))
-dend <- as.dendrogram(hc)
-# order it the closest we can to the order of the observations:
-dend <- rotate(dend, 1:10000)
-# Color the branches based on the clusters:
-dend <- color_branches(dend, k=2)
-# Manually match the labels, as much as possible, to the real classification:
-labels_colors(dend) <-rainbow_hcl(2)[sort_levels_values(as.numeric(target)[order.dendrogram(dend)])]
-# We shall add the type to the labels:
-labels(dend) <- paste(as.character(target)[order.dendrogram(dend)],"(",labels(dend),")", sep = "")
-# We hang the dendrogram a bit:
-dend <- hang.dendrogram(dend,hang_height=0.1)
-# reduce the size of the labels:
-dend <- set(dend, "labels_cex", 0.5)
-par(mar = c(3,3,3,7))
-plot(dend, main = "Clustered Higgs data set", horiz =  FALSE,  nodePar = list(cex = .007))
-legend("topleft", legend = higgs_target, fill = rainbow_hcl(3))
+#heatmaps for original variables with different methods and distance euclidian
+#for comparison with the heatmaps done with the principal components
+pheatmap(predictors_scale, main = "Heatmap of original variables, method=ward.D2, distance=euclidian",
+         show_rownames=FALSE,clustering_method = "ward.D2")
