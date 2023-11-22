@@ -1,4 +1,4 @@
-setwd("C:/Users/telmo/OneDrive/Ambiente de Trabalho/MEDM Project 1/")      # Change working directory
+setwd("C:/Users/bfpar/Documents/GitHub/Data-Mining/Project")      # Change working directory
 library(factoextra)
 library(foreign)
 library(ggfortify)
