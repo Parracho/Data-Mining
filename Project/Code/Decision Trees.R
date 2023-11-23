@@ -11,3 +11,4 @@ data1 <- data_frame[sample_indices, ]
 arv_data=rpart(data1[,1]~.,data=data1[,-1],cp=0.05)
 plot(arv_data)
 text(arv_data)
+
