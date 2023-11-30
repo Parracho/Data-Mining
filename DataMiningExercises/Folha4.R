@@ -1,5 +1,5 @@
 # Set the working directory to a specific path
-setwd("C:/Users/bfpar/Documents/Data-Mining/DataMiningExercises/wine")
+setwd("C:/Users/bfpar/Documents/GitHub/Data-Mining/DataMiningExercises/wine")
 library(MASS)
 wine=read.table("wine.data",sep=",")
 dim(wine)

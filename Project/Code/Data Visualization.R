@@ -1,4 +1,4 @@
-setwd("C:/Users/bfpar/Documents/GitHub/Data-Mining/Project")      # Change working directory
+setwd("C:/Users/bfpar/Documents/GitHub/Data-Mining/Project/Code")      # Change working directory
 library(factoextra)
 library(foreign)
 library(ggfortify)
