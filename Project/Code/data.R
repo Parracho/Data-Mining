@@ -22,3 +22,17 @@ ggplot(cor_variables_long, aes(Var1, Var2, fill = Freq)) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   coord_fixed(ratio = 1)
+#----------------------------------------------------------------------------
+library(tidymodels)
+#only numeric columns
+numeric_cols <- sapply(data_, is.numeric)
+data_long <- data_ %>%
+  pivot_longer(cols = names(data_)[numeric_cols],names_to = "variable",values_to = "value")
+#create histograms
+data_histograms <- ggplot(data_long, aes(x = value)) +
+  geom_histogram(bins = 30, color = "black", fill = "lightblue") +
+  facet_wrap(~variable, scales = "free", ncol = 4) +
+  labs(title = "Histograms of Numeric Variables in Dataset",
+       x = "Value", y = "Frequency") +
+  theme_minimal()
+print(data_histograms)
